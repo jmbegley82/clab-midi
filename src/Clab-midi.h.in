@@ -1,0 +1,22 @@
+/*
+ * Clab-midi.h.in
+ * 07/19/2019
+ * jmb
+ */
+
+#ifndef CLABMIDI_H
+#define CLABMIDI_H
+
+#define CLAB_MIDI_VERSION_MAJOR @Clab-midi_VERSION_MAJOR@
+#define CLAB_MIDI_VERSION_MINOR @Clab-midi_VERSION_MINOR@
+
+namespace jmb {
+	namespace common {
+		int ClabMidiInit();
+		std::string ClabMidiVersionString();
+		int ClabMidiVersionMajor();
+		int ClabMidiVersionMinor();
+	}
+}
+
+#endif //CLABMIDI_H
