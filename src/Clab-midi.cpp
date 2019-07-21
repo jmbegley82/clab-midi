@@ -12,8 +12,7 @@
 #include "toaster.h"
 
 using std::string;
-using jmb::common::Manager;
-using jmb::common::Video;
+using jmb::common::MidiOut;
 using jmb::common::Types::AddMapping;
 
 namespace jmb {

@@ -1,6 +1,6 @@
 Includes cmake support.
 
-Requirements:  cmake, pkgconfig, dev packages for Clab, SDL2, SDL2_mixer, SDL2_image, SDL2_ttf
+Requirements:  cmake, pkgconfig, dev packages for Clab and RtMidi
 
 Cmake-specific:
 > mkdir build
