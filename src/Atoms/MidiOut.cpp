@@ -7,11 +7,17 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <RtMidi.h>
 #include "MidiOut.h"
 #include "Atom.h"
 #include "Node.h"
 #include "Notype.h"
-#include "StringStuff.h"
+#include "StringManip.h"
+#include "Log.h"
+#include "config.h"
+#include "toaster.h"
+
+using std::string;
 
 namespace jmb {
 
@@ -23,8 +29,17 @@ namespace jmb {
 			MidiOut("");
 		}
 		
-		MidiOut::MidiOut(std::string const& name) : Atom(name) {
-			//TODO: things
+		MidiOut::MidiOut(string const& name) : Atom(name) {
+			RtMidiOut* rtmo;
+			try {
+				rtmo = new RtMidiOut();
+			} catch (RtMidiError &e) {
+				e.printMessage();
+				exit(EXIT_FAILURE);
+			}
+
+			rtmo->openVirtualPort(TOASTER(PACKAGE_NAME));
+			_out = (void*)rtmo;
 		}
 
 		MidiOut::MidiOut(const Atom* atm) {
@@ -34,18 +49,18 @@ namespace jmb {
 		MidiOut::~MidiOut() {
 		}
 
-		Atom* MidiOut::CtorWrapper(std::string name) {
+		Atom* MidiOut::CtorWrapper(string name) {
 			return new MidiOut(name);
 		}
 /*
-		Atom* Atom::Dereference(std::string const& name) {
+		Atom* Atom::Dereference(string const& name) {
 			// Applied to command string subjects and targets to convert them
 			//   into Atom*s
 			
 			if(name == "") return this;
 			else if(name[0] == '/') {
 				// remove the leading slash
-				std::string noSlash = name;
+				string noSlash = name;
 				noSlash.erase(0, 1);
 				// get top level Atom
 				Atom* root = this;
@@ -61,36 +76,37 @@ namespace jmb {
 		}
 */
 		
-		int MidiOut::Command(std::string const& cmd) {
+		int MidiOut::Command(string const& cmd) {
 			return Atom::Command(cmd);
 		}
 		
-		std::string MidiOut::GetValueAsStdString() {
-			std::string retval = std::string("MidiOut ") + identity + "@" + std::hex(this);
-			return retval;
+		string MidiOut::GetValueAsStdString() {
+			//string retval = string("MidiOut ") + identity + "@" + std::hex(this);
+			//return retval;
+			return string("MidiOut ") + identity + "@" + GetHexString(this);
 		}
 		
 		void MidiOut::Debug() {}
 		
-		void MidiOut::SetValue(std::string const& val) {}
+		void MidiOut::SetValue(string const& val) {}
 		
 		int MidiOut::OperatorEqu(Atom* atm) {
-			std::cout << "MidiOut::" << __FUNCTION__ << ": stub" << std::endl;
+			*Log << "MidiOut::" << __FUNCTION__ << ": stub" << std::endl;
 			return -1;
 		}
 		
 		int MidiOut::_Procedure() {
-			std::cout << GetAbsolutePath() << std::endl;
+			*Log << GetAbsolutePath() << std::endl;
 			return 0;
 		}
 
-		int MidiOut::_Declarate(std::string const& declarator, std::string const& subject) {
+		int MidiOut::_Declarate(string const& declarator, string const& subject) {
 			return -1;
 		}
 		
 		Atom* MidiOut::_Interpret(Atom* atm) {
 			// default
-			//std::cout << "MidiOut::_Interpret" << std::endl;
+			//*Log << "MidiOut::_Interpret" << std::endl;
 			return new MidiOut(atm);
 		}
 		
@@ -100,7 +116,7 @@ namespace jmb {
 		
 		void MidiOut::Tick(int time) {
 			// almost purely virtual
-			//std::cout << GetAbsolutePath() << "::Tick(" << time << ")" << std::endl;
+			//*Log << GetAbsolutePath() << "::Tick(" << time << ")" << std::endl;
 		}
 	}
 

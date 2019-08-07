@@ -51,12 +51,14 @@ namespace jmb {
 			//virtual int OperatorDiv(Atom* atm); // /=
 			//virtual int OperatorPow(Atom* atm); // ^=
 			virtual void* GetRawData();
-			//virtual void Tick(int time);
+			virtual void Tick(int time);
 		protected:
 			virtual int _Procedure();
 			virtual int _Declarate(std::string const& declarator, std::string const& subject);
 			virtual Atom* _Interpret(Atom* atm);
 			char _type;
+		private:
+			void* _out;  //RtMidiOut*
 		};
 	}
 	
