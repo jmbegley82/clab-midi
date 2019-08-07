@@ -30,16 +30,6 @@ namespace jmb {
 		}
 		
 		MidiOut::MidiOut(string const& name) : Atom(name) {
-			RtMidiOut* rtmo;
-			try {
-				rtmo = new RtMidiOut();
-			} catch (RtMidiError &e) {
-				e.printMessage();
-				exit(EXIT_FAILURE);
-			}
-
-			rtmo->openVirtualPort(TOASTER(PACKAGE_NAME));
-			_out = (void*)rtmo;
 		}
 
 		MidiOut::MidiOut(const Atom* atm) {
@@ -52,29 +42,6 @@ namespace jmb {
 		Atom* MidiOut::CtorWrapper(string name) {
 			return new MidiOut(name);
 		}
-/*
-		Atom* Atom::Dereference(string const& name) {
-			// Applied to command string subjects and targets to convert them
-			//   into Atom*s
-			
-			if(name == "") return this;
-			else if(name[0] == '/') {
-				// remove the leading slash
-				string noSlash = name;
-				noSlash.erase(0, 1);
-				// get top level Atom
-				Atom* root = this;
-				while(root->parent != NULL) {
-					root = (Atom*)root->parent;
-				}
-				// pass noSlash to the root
-				return root->Dereference(noSlash);
-			} else //return NULL;
-			{
-				return new Notype(name);  // is it wise to put that into identity?
-			}
-		}
-*/
 		
 		int MidiOut::Command(string const& cmd) {
 			return Atom::Command(cmd);
@@ -117,6 +84,25 @@ namespace jmb {
 		void MidiOut::Tick(int time) {
 			// almost purely virtual
 			//*Log << GetAbsolutePath() << "::Tick(" << time << ")" << std::endl;
+		}
+
+		void MidiOut::_OpenMidiOut() {
+			RtMidiOut* rtmo;
+			try {
+				rtmo = new RtMidiOut();
+			} catch (RtMidiError &e) {
+				e.printMessage();
+				exit(EXIT_FAILURE);
+			}
+
+			rtmo->openVirtualPort(TOASTER(PACKAGE_NAME));
+			_out = (void*)rtmo;
+		}
+
+		void MidiOut::_CloseMidiOut() {
+		}
+
+		void MidiOut::_SetDefaults() {
 		}
 	}
 

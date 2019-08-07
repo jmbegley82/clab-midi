@@ -58,6 +58,9 @@ namespace jmb {
 			virtual Atom* _Interpret(Atom* atm);
 			char _type;
 		private:
+			void _OpenMidiOut();
+			void _CloseMidiOut();
+			void _SetDefaults();
 			void* _out;  //RtMidiOut*
 		};
 	}

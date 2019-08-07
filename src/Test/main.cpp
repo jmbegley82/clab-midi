@@ -34,6 +34,7 @@ using jmb::common::ClabMidiInit;
 using jmb::common::Log;
 using jmb::common::GetHexString;
 using std::endl;
+using std::cin;
 
 void test0() {
 	*Log << ":::Version Variable Test - Clab:::" << endl;
@@ -73,5 +74,8 @@ int main(int argc, char** argv) {
 	test0();
 	test1();
 	test2();
+
+	*Log << "Press ENTER to continue" << endl;
+	cin.ignore();
 	return 0;
 }
