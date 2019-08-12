@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cassert>
 #include <RtMidi.h>
+#include "Midi.h"
 #include "MidiOut.h"
 #include "Atom.h"
 #include "Node.h"
@@ -18,6 +19,7 @@
 #include "toaster.h"
 
 using std::string;
+using jmb::Midi::SendMidiMsg;
 
 namespace jmb {
 
@@ -30,6 +32,7 @@ namespace jmb {
 		}
 		
 		MidiOut::MidiOut(string const& name) : Atom(name) {
+			*Log << name << ":  ah, why not." << std::endl;
 		}
 
 		MidiOut::MidiOut(const Atom* atm) {
@@ -42,11 +45,18 @@ namespace jmb {
 		Atom* MidiOut::CtorWrapper(string name) {
 			return new MidiOut(name);
 		}
-		
+
 		int MidiOut::Command(string const& cmd) {
-			return Atom::Command(cmd);
-		}
-		
+			//TODO:  commands to set channel name and to send messages
+			if(cmd == "init") {
+				_OpenMidiOut();
+				_SetDefaults();
+			} else if(cmd == "something") {
+				//return 0;
+			} else return Atom::Command(cmd);
+			return 0;
+		}	
+
 		string MidiOut::GetValueAsStdString() {
 			//string retval = string("MidiOut ") + identity + "@" + std::hex(this);
 			//return retval;
@@ -103,6 +113,9 @@ namespace jmb {
 		}
 
 		void MidiOut::_SetDefaults() {
+			*Log << identity << ":  _SetDefaults " << GetHexString(_out) << std::endl;
+			SendMidiMsg((RtMidiOut*)_out, 0xC0, 0x00);		// set ch.1 program to 0
+			SendMidiMsg((RtMidiOut*)_out, 0xB0, 0x07, 0x7F);	// set ch.1 volume to 127
 		}
 	}
 

@@ -27,6 +27,7 @@
 
 using jmb::common::Atom;
 using jmb::common::Node;
+using jmb::common::MidiOut;
 using jmb::common::Clock;
 using jmb::common::Types::AddMapping;
 using jmb::common::ClabInit;
@@ -56,13 +57,28 @@ void test1() {
 	*Log << endl;
 }
 
-void test2() {
-	*Log << ":::MidiOut test:::" << endl;
-	Node root("root");
-	root.Command("MidiOut out1");
-	Atom* out1 = root.Dereference("out1");
+Node* test2() {
+	*Log << ":::MidiOut object test:::" << endl;
+	//Node root("root");
+	Node* retval = new Node("root");
+	//root.Command("MidiOut out1");
+	retval->Command("MidiOut out1");
+	Atom* out1 = retval->Dereference("out1");
+	assert(out1 != NULL);
+	assert(out1->identity == "out1");
 	*Log << "/out1 address appears to be:  " << GetHexString(out1) << endl;
 	*Log << endl;
+	return retval;
+}
+
+void test3(Node* out1) {
+	*Log << ":::MidiOut functionality test:::" << endl;
+	*Log << "out1 identity is " << out1->identity << endl;
+	//*Log << "out1 path is " << out1->GetAbsolutePath() << endl;
+	// run out1's init command, setting eg. midi program number, master volume...
+	out1->Command("/out1 := init");
+	*Log << endl;
+	
 }
 
 int main(int argc, char** argv) {
@@ -73,7 +89,9 @@ int main(int argc, char** argv) {
 
 	test0();
 	test1();
-	test2();
+	//MidiOut* out1 = (MidiOut*)test2();
+	Node* out1 = test2();
+	test3(out1);
 
 	*Log << "Press ENTER to continue" << endl;
 	cin.ignore();
