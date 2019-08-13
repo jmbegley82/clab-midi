@@ -32,7 +32,7 @@ namespace jmb {
 		}
 		
 		MidiOut::MidiOut(string const& name) : Atom(name) {
-			*Log << name << ":  ah, why not." << std::endl;
+			_OpenMidiOut();
 		}
 
 		MidiOut::MidiOut(const Atom* atm) {
@@ -49,7 +49,7 @@ namespace jmb {
 		int MidiOut::Command(string const& cmd) {
 			//TODO:  commands to set channel name and to send messages
 			if(cmd == "init") {
-				_OpenMidiOut();
+				//_OpenMidiOut();
 				_SetDefaults();
 			} else if(cmd == "something") {
 				//return 0;
@@ -96,26 +96,44 @@ namespace jmb {
 			//*Log << GetAbsolutePath() << "::Tick(" << time << ")" << std::endl;
 		}
 
-		void MidiOut::_OpenMidiOut() {
-			RtMidiOut* rtmo;
-			try {
-				rtmo = new RtMidiOut();
-			} catch (RtMidiError &e) {
-				e.printMessage();
-				exit(EXIT_FAILURE);
-			}
+		void MidiOut::SendMidiMsg(unsigned char sig1, unsigned char sig2) {
+			if(_out) jmb::Midi::SendMidiMsg((RtMidiOut*)_out, sig1, sig2);
+		}
 
-			rtmo->openVirtualPort(TOASTER(PACKAGE_NAME));
-			_out = (void*)rtmo;
+		void MidiOut::SendMidiMsg(unsigned char sig1, unsigned char sig2, unsigned char sig3) {
+			if(_out) jmb::Midi::SendMidiMsg((RtMidiOut*)_out, sig1, sig2, sig3);
+		}
+
+		void MidiOut::_OpenMidiOut() {
+			if(!_out) {
+				RtMidiOut* rtmo;
+				try {
+					rtmo = new RtMidiOut();
+				} catch (RtMidiError &e) {
+					e.printMessage();
+					exit(EXIT_FAILURE);
+				}
+				
+				rtmo->openVirtualPort(TOASTER(PACKAGE_NAME));
+				_out = (void*)rtmo;
+			} else {
+				*Log << identity << ":  _OpenMidiOut:  port already open" << std::endl;
+			}
 		}
 
 		void MidiOut::_CloseMidiOut() {
+			if(_out) {
+				delete (RtMidiOut*)_out;
+				_out = NULL;
+			} else {
+				*Log << identity << ":  _CloseMidiOut:  port not open" << std::endl;
+			}
 		}
 
 		void MidiOut::_SetDefaults() {
-			*Log << identity << ":  _SetDefaults " << GetHexString(_out) << std::endl;
-			SendMidiMsg((RtMidiOut*)_out, 0xC0, 0x00);		// set ch.1 program to 0
-			SendMidiMsg((RtMidiOut*)_out, 0xB0, 0x07, 0x7F);	// set ch.1 volume to 127
+			//*Log << identity << ":  _SetDefaults:  " << GetHexString(_out) << std::endl;
+			SendMidiMsg(0xC0, 0x00);		// set ch.1 program to 0
+			SendMidiMsg(0xB0, 0x07, 0x7F);		// set ch.1 volume to 127
 		}
 	}
 

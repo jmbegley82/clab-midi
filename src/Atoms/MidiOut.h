@@ -52,6 +52,8 @@ namespace jmb {
 			//virtual int OperatorPow(Atom* atm); // ^=
 			virtual void* GetRawData();
 			virtual void Tick(int time);
+			void SendMidiMsg(unsigned char sig1, unsigned char sig2);
+			void SendMidiMsg(unsigned char sig1, unsigned char sig2, unsigned char sig3);
 		protected:
 			virtual int _Procedure();
 			virtual int _Declarate(std::string const& declarator, std::string const& subject);
