@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (Clab-midi)
 set (Clab-midi_VERSION_MAJOR 0)
-set (Clab-midi_VERSION_MINOR 1)
+set (Clab-midi_VERSION_MINOR 2)
 set (DEST_DIR "${CMAKE_INSTALL_PREFIX}")
 set (prefix "${DEST_DIR}")
 set (exec_prefix "${prefix}")

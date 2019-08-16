@@ -4,7 +4,6 @@
  *  jmb
  */
 
-// hold on to your butts.
 
 #ifndef MIDIOUT_H
 #define MIDIOUT_H
@@ -52,6 +51,7 @@ namespace jmb {
 			//virtual int OperatorPow(Atom* atm); // ^=
 			virtual void* GetRawData();
 			virtual void Tick(int time);
+			void SendMidiMsg(std::string signals);
 			void SendMidiMsg(unsigned char sig1, unsigned char sig2);
 			void SendMidiMsg(unsigned char sig1, unsigned char sig2, unsigned char sig3);
 		protected:

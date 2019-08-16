@@ -19,6 +19,8 @@
 #include "toaster.h"
 
 using std::string;
+using jmb::common::GetFirstWord;
+using jmb::common::GetFirstWordEtc;
 using jmb::Midi::SendMidiMsg;
 
 namespace jmb {
@@ -48,18 +50,24 @@ namespace jmb {
 
 		int MidiOut::Command(string const& cmd) {
 			//TODO:  commands to set channel name and to send messages
-			if(cmd == "init") {
-				//_OpenMidiOut();
+			string remainder;
+			string fword = GetFirstWordEtc(cmd, remainder);
+
+			if(fword == "init") {
 				_SetDefaults();
-			} else if(cmd == "something") {
-				//return 0;
+			} else if(fword == "open") {
+				_OpenMidiOut();
+			} else if(fword == "close") {
+				_CloseMidiOut();
+			} else if(fword == "send") {
+				SendMidiMsg(remainder);
+			} else if(fword == "test") {
+				SendMidiMsg("0xC0 0x00");
 			} else return Atom::Command(cmd);
 			return 0;
-		}	
+		}
 
 		string MidiOut::GetValueAsStdString() {
-			//string retval = string("MidiOut ") + identity + "@" + std::hex(this);
-			//return retval;
 			return string("MidiOut ") + identity + "@" + GetHexString(this);
 		}
 		
@@ -82,8 +90,6 @@ namespace jmb {
 		}
 		
 		Atom* MidiOut::_Interpret(Atom* atm) {
-			// default
-			//*Log << "MidiOut::_Interpret" << std::endl;
 			return new MidiOut(atm);
 		}
 		
@@ -92,8 +98,10 @@ namespace jmb {
 		}
 		
 		void MidiOut::Tick(int time) {
-			// almost purely virtual
-			//*Log << GetAbsolutePath() << "::Tick(" << time << ")" << std::endl;
+		}
+
+		void MidiOut::SendMidiMsg(string signals) {
+			if(_out) jmb::Midi::SendMidiMsg((RtMidiOut*)_out, signals);
 		}
 
 		void MidiOut::SendMidiMsg(unsigned char sig1, unsigned char sig2) {
@@ -131,7 +139,6 @@ namespace jmb {
 		}
 
 		void MidiOut::_SetDefaults() {
-			//*Log << identity << ":  _SetDefaults:  " << GetHexString(_out) << std::endl;
 			SendMidiMsg(0xC0, 0x00);		// set ch.1 program to 0
 			SendMidiMsg(0xB0, 0x07, 0x7F);		// set ch.1 volume to 127
 		}
