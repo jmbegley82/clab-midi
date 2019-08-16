@@ -42,6 +42,7 @@ namespace jmb {
 		}
 		
 		MidiOut::~MidiOut() {
+			_CloseMidiOut();
 		}
 
 		Atom* MidiOut::CtorWrapper(string name) {
