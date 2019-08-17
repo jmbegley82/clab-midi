@@ -19,20 +19,18 @@
 #include "toaster.h"
 
 using std::string;
-using jmb::common::GetFirstWord;
-using jmb::common::GetFirstWordEtc;
 using jmb::Midi::SendMidiMsg;
 
 namespace jmb {
 
 	namespace common {
-		
+
 		const char MidiOut::type = 0xA0;
-		
+
 		MidiOut::MidiOut() {
 			MidiOut("");
 		}
-		
+
 		MidiOut::MidiOut(string const& name) : Atom(name) {
 			_OpenMidiOut();
 		}
@@ -40,7 +38,7 @@ namespace jmb {
 		MidiOut::MidiOut(const Atom* atm) {
 			assert(0);
 		}
-		
+
 		MidiOut::~MidiOut() {
 			_CloseMidiOut();
 		}
@@ -71,16 +69,16 @@ namespace jmb {
 		string MidiOut::GetValueAsStdString() {
 			return string("MidiOut ") + identity + "@" + GetHexString(this);
 		}
-		
+
 		void MidiOut::Debug() {}
-		
+
 		void MidiOut::SetValue(string const& val) {}
-		
+
 		int MidiOut::OperatorEqu(Atom* atm) {
 			*Log << "MidiOut::" << __FUNCTION__ << ": stub" << std::endl;
 			return -1;
 		}
-		
+
 		int MidiOut::_Procedure() {
 			*Log << GetAbsolutePath() << std::endl;
 			return 0;
@@ -89,15 +87,15 @@ namespace jmb {
 		int MidiOut::_Declarate(string const& declarator, string const& subject) {
 			return -1;
 		}
-		
+
 		Atom* MidiOut::_Interpret(Atom* atm) {
 			return new MidiOut(atm);
 		}
-		
+
 		void* MidiOut::GetRawData() {
 			return NULL;
 		}
-		
+
 		void MidiOut::Tick(int time) {
 		}
 
@@ -143,6 +141,7 @@ namespace jmb {
 			SendMidiMsg(0xC0, 0x00);		// set ch.1 program to 0
 			SendMidiMsg(0xB0, 0x07, 0x7F);		// set ch.1 volume to 127
 		}
+
 	}
 
 }

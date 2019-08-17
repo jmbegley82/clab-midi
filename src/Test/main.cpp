@@ -76,8 +76,9 @@ void test3(Node* out1) {
 	*Log << "out1 identity is " << out1->identity << endl;
 	//*Log << "out1 path is " << out1->GetAbsolutePath() << endl;
 	// run out1's init command, setting eg. midi program number, master volume...
-	//out1->Command("/out1 := init");
-	out1->Command("/out1 := test");
+	out1->Command("/out1 := init");
+	//out1->Command("/out1 := test");
+	//out1->Command("/out1 := send 0xC0 0x00");
 	*Log << endl;
 	
 }

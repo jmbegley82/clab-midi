@@ -22,7 +22,9 @@ using jmb::common::GetFirstWordEtc;
 using jmb::common::Log;
 
 namespace jmb {
+
 	namespace Midi {
+
 		void SendMidiMsg(RtMidiOut* midiOut, string signals) {
 			vector<unsigned char> _msg;
 			string input = signals;
@@ -54,5 +56,7 @@ namespace jmb {
 			//if(midiOut)
 				midiOut->sendMessage(&_msg);
 		}
+
 	}
+
 }

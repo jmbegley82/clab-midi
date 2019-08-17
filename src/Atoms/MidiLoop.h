@@ -1,12 +1,13 @@
 /*
- *  MidiOut.h
- *  7/20/19.
+ *  MidiLoop.h
+ *  8/16/19
  *  jmb
+ *
  */
 
 
-#ifndef MIDIOUT_H
-#define MIDIOUT_H
+#ifndef MIDILOOP_H
+#define MIDILOOP_H
 
 #include <string>
 #include "Atom.h"
@@ -17,12 +18,12 @@ namespace jmb {
 
 		class Node;
 
-		class MidiOut : public Atom {
+		class MidiLoop : public Atom {
 		public:
-			MidiOut();
-			MidiOut(std::string const& name);
-			MidiOut(const Atom* atm);
-			~MidiOut();
+			MidiLoop();
+			MidiLoop(std::string const& name);
+			MidiLoop(const Atom* atm);
+			~MidiLoop();
 			static Atom* CtorWrapper(std::string name);
 			static const char type;
 			//bool isEphemeral;
@@ -51,24 +52,16 @@ namespace jmb {
 			//virtual int OperatorPow(Atom* atm); // ^=
 			virtual void* GetRawData();
 			virtual void Tick(int time);
-
-			void SendMidiMsg(std::string signals);
-			void SendMidiMsg(unsigned char sig1, unsigned char sig2);
-			void SendMidiMsg(unsigned char sig1, unsigned char sig2, unsigned char sig3);
 		protected:
 			virtual int _Procedure();
 			virtual int _Declarate(std::string const& declarator, std::string const& subject);
 			virtual Atom* _Interpret(Atom* atm);
 			char _type;
 		private:
-			void _OpenMidiOut();
-			void _CloseMidiOut();
-			void _SetDefaults();
-			void* _out;  //RtMidiOut*
 		};
 
 	}
 
 }
 
-#endif //MIDIOUT_H
+#endif //MIDILOOP_H
