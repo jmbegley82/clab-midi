@@ -20,6 +20,7 @@
 #include "String.h"
 #include "Notype.h"
 #include "MidiOut.h"
+#include "Midi.h"
 #include "Time.h"
 #include "Clock.h"
 #include "Log.h"
@@ -34,6 +35,7 @@ using jmb::common::ClabInit;
 using jmb::common::ClabMidiInit;
 using jmb::common::Log;
 using jmb::common::GetHexString;
+using jmb::Midi::GetNoteFromSignal;
 using std::endl;
 using std::cin;
 
@@ -83,6 +85,14 @@ void test3(Node* out1) {
 	
 }
 
+void test4() {
+	*Log << ":::GetNoteFromSignal test:::" << endl;
+	*Log << "Signal 0   is C-2; GNFS thinks it is " << GetNoteFromSignal(0) << endl;
+	*Log << "Signal 127 is " << GetNoteFromSignal(127) << endl;
+	*Log << "Signal 255 is " << GetNoteFromSignal(255) << "empty because it is not a valid signal" << endl;
+	*Log << endl;
+}
+
 int main(int argc, char** argv) {
 	ClabInit();
 	ClabMidiInit();
@@ -101,6 +111,8 @@ int main(int argc, char** argv) {
 
 	*Log << "Press ENTER to continue" << endl;
 	cin.ignore();
+
+	test4();
 
 	return 0;
 }

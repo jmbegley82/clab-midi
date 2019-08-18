@@ -16,6 +16,7 @@ namespace jmb {
 		void SendMidiMsg(RtMidiOut* midiOut, std::string signals);
 		void SendMidiMsg(RtMidiOut* midiOut, unsigned char sig1, unsigned char sig2);
 		void SendMidiMsg(RtMidiOut* midiOut, unsigned char sig1, unsigned char sig2, unsigned char sig3);
+		std::string GetNoteFromSignal(unsigned char signal);
 	}
 }
 
