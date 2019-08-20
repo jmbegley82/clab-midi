@@ -33,6 +33,12 @@ namespace jmb {
 		}
 
 		MidiLoop::MidiLoop(string const& name) : Atom(name) {
+			// general init
+
+			// if this is a child of another Atom, attempt to find
+			//   a MidiOut Atom amongst siblings
+
+			// if a MidiOut was found, ... then what?
 		}
 
 		MidiLoop::MidiLoop(const Atom* atm) {

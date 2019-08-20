@@ -7,12 +7,14 @@
 #include <string>
 #include "Clab-midi.h"
 #include "MidiOut.h"
+#include "MidiLoop.h"
 #include "Types.h"
 #include "config.h"
 #include "toaster.h"
 
 using std::string;
 using jmb::common::MidiOut;
+using jmb::common::MidiLoop;
 using jmb::common::Types::AddMapping;
 
 namespace jmb {
@@ -20,6 +22,7 @@ namespace jmb {
 		int ClabMidiInit() {
 			int retval = 0;  // TODO:  something meaningful with this?
 			AddMapping("MidiOut", MidiOut::CtorWrapper);
+			AddMapping("MidiLoop", MidiLoop::CtorWrapper);
 			return retval;
 		}
 
